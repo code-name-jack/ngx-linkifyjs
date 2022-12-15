@@ -3,5 +3,8 @@
   "dest": "../../dist/ngx-linkifyjs-v2",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "allowedNonPeerDependencies": [
+    "linkify"
+  ]
 }
