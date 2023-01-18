@@ -1,7 +1,3 @@
-<p align="center">
-  <img height="256px" width="256px" style="text-align: center;" src="https://cdn.jsdelivr.net/gh/anthonynahas/ngx-linkifyjs@master/demo/src/assets/logo.svg">
-</p>
-
 # ngx-linkifyjs-v2 - Angular 14 wrapper for linkifyjs -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs
 
 [![npm version](https://badge.fury.io/js/ngx-linkifyjs.svg)](https://badge.fury.io/js/ngx-linkifyjs),
