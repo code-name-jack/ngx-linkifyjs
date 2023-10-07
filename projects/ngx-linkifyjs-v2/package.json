@@ -1,7 +1,7 @@
 {
   "name": "@code-name-jack/ngx-linkifyjs",
   "description": "Angular wrapper for linkifyjs(v4) -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs",
-  "version": "15.0.1",
+  "version": "16.0.1",
   "homepage": "https://github.com/code-name-jack/ngx-linkifyjs-v2",
   "author": {
     "name": "Code Name Jack",
@@ -46,12 +46,20 @@
     "test": "../../node_modules/.bin/jest --coverage",
     "test:watch": "../../node_modules/.bin/jest --coverage --watch"
   },
-  "peerDependencies": {
-    "@angular/common": "<16",
-    "@angular/core": "<16"
-  },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "@angular/common": "~16.x",
+    "@angular/core": "~16.x",
+    "@schematics/angular": "~16.x"
+  },
+  "dependencies": {
+    "linkify-plugin-hashtag": "^4.0.2",
+    "linkify-plugin-mention": "^4.0.2",
+    "linkify-string": "^4.0.2",
+    "linkifyjs": "^4.0.2",
+    "tslib": "^2.4.1"
   },
   "release-it": {
     "github": {
@@ -129,13 +137,6 @@
       "conventional-github-releaser",
       "rollup-plugin-uglify"
     ]
-  },
-  "dependencies": {
-    "tslib": "^2.4.1",
-    "linkifyjs": "^4.0.2",
-    "linkify-plugin-hashtag": "^4.0.2",
-    "linkify-plugin-mention": "^4.0.2",
-    "linkify-string": "^4.0.2"
   },
   "commitplease": {
     "style": "angular",
