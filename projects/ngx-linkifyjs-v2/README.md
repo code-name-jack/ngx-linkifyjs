@@ -13,7 +13,7 @@ Run `ng build ngx-linkifyjs-v2` to build the project. The build artifacts will b
 
 ## Publishing
 
-After building your library with `ng build ngx-linkifyjs-v2`, go to the dist folder `cd dist/ngx-linkifyjs-v2` and run `npm publish`.
+After building your library with `ng build ngx-linkifyjs-v2`, go to the dist folder `cd dist/ngx-linkifyjs-v2` and run `npm publish --access=public`.
 
 ## Running unit tests
 
