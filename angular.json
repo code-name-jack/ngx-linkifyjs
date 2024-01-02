@@ -125,7 +125,8 @@
             "main": "src/main.server.ts",
             "tsConfig": "tsconfig.server.json",
             "sourceMap": true,
-            "optimization": false
+            "optimization": false,
+            "buildOptimizer": false
           },
           "configurations": {
             "production": {
@@ -135,7 +136,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true
+              "optimization": true,
+              "buildOptimizer": true
             }
           },
           "defaultConfiguration": ""
@@ -189,5 +191,13 @@
       "@angular-eslint/schematics"
     ],
     "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }
