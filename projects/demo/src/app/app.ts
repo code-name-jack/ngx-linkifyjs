@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxLinkifyjsPipe, NgxLinkifyjsService, NgxLinkifyOptions, Link } from 'ngx-linkifyjs-v2';
@@ -25,8 +25,9 @@ export class App {
   
   // Results from service
   foundLinks: Link[] = [];
-  
-  constructor(private linkifyService: NgxLinkifyjsService) {
+  private readonly linkifyService = inject(NgxLinkifyjsService);
+
+  constructor() {
     this.findLinks();
   }
   
