@@ -7,10 +7,10 @@
     "build:prod": "ng build ngx-linkifyjs-v2 --configuration production",
     "build:docs": "npx compodoc -p projects/ngx-linkifyjs-v2/tsconfig.lib.json --hideGenerator --disableCoverage -d dist/doc/",
     "publish:lib": "npm publish dist/ngx-linkifyjs-v2",
-    "test": "jest",
+    "test": "ng test --watch=false",
+    "test:watch": "ng test",
     "lint": "ng lint ngx-linkifyjs-v2",
     "release": "release-it",
-    "test:watch": "jest --watch",
     "demo": "npm run build && ng serve demo",
     "demo:build": "npm run build && ng build demo",
     "demo:build:prod": "npm run build:prod && ng build demo --configuration production"
@@ -31,11 +31,11 @@
     "@angular-devkit/build-angular": "^20.3.8",
     "@angular-devkit/core": "^20.3.8",
     "@angular-devkit/schematics": "^20.3.8",
-    "@angular-eslint/builder": "^20.0.0",
-    "@angular-eslint/eslint-plugin": "^20.0.0",
-    "@angular-eslint/eslint-plugin-template": "^20.0.0",
-    "@angular-eslint/schematics": "^20.0.0",
-    "@angular-eslint/template-parser": "^20.0.0",
+    "@angular-eslint/builder": "^20.5.0",
+    "@angular-eslint/eslint-plugin": "^20.5.0",
+    "@angular-eslint/eslint-plugin-template": "^20.5.0",
+    "@angular-eslint/schematics": "^20.5.0",
+    "@angular-eslint/template-parser": "^20.5.0",
     "@angular/build": "^20.3.8",
     "@angular/cli": "^20.3.8",
     "@angular/compiler": "^20.3.9",
@@ -43,44 +43,14 @@
     "@angular/language-service": "^20.3.9",
     "@compodoc/compodoc": "^1.1.32",
     "@release-it/conventional-changelog": "^10.0.1",
-    "@types/jest": "^29.5.12",
     "@types/node": "^18.19.0",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.53.0",
-    "jest": "^29.7.0",
-    "jest-preset-angular": "^14.6.2",
+    "jsdom": "^27.1.0",
     "ng-packagr": "^20.3.0",
     "release-it": "^19.0.5",
-    "typescript": "~5.9.3"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "roots": [
-      "<rootDir>/projects/ngx-linkifyjs-v2/src"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/projects/ngx-linkifyjs-v2/setup-jest.ts"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(ts|js|mjs)$": [
-        "jest-preset-angular",
-        {
-          "tsconfig": "<rootDir>/projects/ngx-linkifyjs-v2/tsconfig.spec.json",
-          "stringifyContentPathRegex": "\\.html$"
-        }
-      ]
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!.*\\.mjs$)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "html",
-      "js",
-      "json",
-      "mjs"
-    ]
+    "typescript": "~5.9.3",
+    "vitest": "^3.2.4"
   }
 }
