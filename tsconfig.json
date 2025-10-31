@@ -21,10 +21,10 @@
     ],
     "paths": {
       "ngx-linkifyjs-v2": [
-        "dist/ngx-linkifyjs-v2"
+        "projects/ngx-linkifyjs-v2/src/public-api"
       ],
       "ngx-linkifyjs-v2/*": [
-        "dist/ngx-linkifyjs-v2/*"
+        "projects/ngx-linkifyjs-v2/src/lib/*"
       ]
     },
     "esModuleInterop": true,
