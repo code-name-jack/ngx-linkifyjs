@@ -1,0 +1,176 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'projects/ngx-linkifyjs-v2/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Determine version to publish
+        id: determine-version
+        run: |
+          # Read version from package.json
+          PACKAGE_VERSION=$(node -p "require('./projects/ngx-linkifyjs-v2/package.json').version")
+          echo "📦 Version in package.json: $PACKAGE_VERSION"
+          
+          # Get latest git tag
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          LATEST_VERSION=${LATEST_TAG#v}
+          echo "🏷️  Latest git tag: $LATEST_TAG ($LATEST_VERSION)"
+          
+          # Function to compare versions
+          compare_versions() {
+            if [ "$1" = "$2" ]; then
+              echo "equal"
+            else
+              # Use sort -V for version comparison
+              HIGHER=$(printf "%s\n%s" "$1" "$2" | sort -V | tail -n1)
+              if [ "$HIGHER" = "$1" ]; then
+                echo "greater"
+              else
+                echo "less"
+              fi
+            fi
+          }
+          
+          COMPARISON=$(compare_versions "$PACKAGE_VERSION" "$LATEST_VERSION")
+          echo "📊 Comparison: $PACKAGE_VERSION vs $LATEST_VERSION = $COMPARISON"
+          
+          if [ "$COMPARISON" = "greater" ]; then
+            # Package version is higher, use it
+            NEW_VERSION=$PACKAGE_VERSION
+            echo "✅ Using version from package.json: $NEW_VERSION"
+          elif [ "$COMPARISON" = "equal" ]; then
+            # Versions are equal, bump patch
+            IFS='.' read -r major minor patch <<< "$PACKAGE_VERSION"
+            NEW_VERSION="${major}.${minor}.$((patch + 1))"
+            echo "⬆️  Bumping patch version: $LATEST_VERSION → $NEW_VERSION"
+            
+            # Update package.json with new version
+            cd projects/ngx-linkifyjs-v2
+            npm version $NEW_VERSION --no-git-tag-version
+            cd ../..
+            echo "✅ Updated package.json to $NEW_VERSION"
+          else
+            # Package version is lower than latest tag - this shouldn't happen
+            echo "::error::Package version ($PACKAGE_VERSION) is lower than latest tag ($LATEST_VERSION)!"
+            echo "::error::Please update version in projects/ngx-linkifyjs-v2/package.json"
+            exit 1
+          fi
+          
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Will publish version: $NEW_VERSION"
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run tests
+        run: npm test
+      
+      - name: Build library (production)
+        run: npm run build:prod
+      
+      - name: Check if version exists on npm
+        id: check-version
+        run: |
+          PACKAGE_VERSION=${{ steps.determine-version.outputs.version }}
+          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          
+          if npm view @code-name-jack/ngx-linkifyjs@$PACKAGE_VERSION version 2>/dev/null; then
+            echo "version_exists=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Version $PACKAGE_VERSION already exists on npm"
+          else
+            echo "version_exists=false" >> $GITHUB_OUTPUT
+            echo "✅ Version $PACKAGE_VERSION is new and ready to publish"
+          fi
+      
+      - name: Publish to NPM
+        if: steps.check-version.outputs.version_exists == 'false'
+        run: npm publish dist/ngx-linkifyjs-v2 --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+      
+      - name: Create Git tag
+        if: steps.check-version.outputs.version_exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Check if package.json was modified and commit if needed
+          if ! git diff --quiet projects/ngx-linkifyjs-v2/package.json; then
+            git add projects/ngx-linkifyjs-v2/package.json
+            git commit -m "chore: bump version to ${{ steps.determine-version.outputs.version }}"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
+          
+          # Create and push tag
+          git tag -a "v${{ steps.determine-version.outputs.version }}" -m "Release v${{ steps.determine-version.outputs.version }}"
+          git push origin "v${{ steps.determine-version.outputs.version }}"
+      
+      - name: Extract CHANGELOG for this version
+        if: steps.check-version.outputs.version_exists == 'false'
+        id: changelog
+        run: |
+          VERSION=${{ steps.determine-version.outputs.version }}
+          # Extract changelog section for this version
+          if [ -f CHANGELOG.md ]; then
+            # Try to extract the section for this version
+            CHANGELOG=$(awk "/## \[?${VERSION}\]?/,/## \[?[0-9]/" CHANGELOG.md | head -n -1 | tail -n +2)
+            if [ -z "$CHANGELOG" ]; then
+              CHANGELOG="See full changelog at [CHANGELOG.md](https://github.com/code-name-jack/ngx-linkifyjs-v2/blob/master/CHANGELOG.md)"
+            fi
+          else
+            CHANGELOG="No changelog available"
+          fi
+          # Save to file to preserve formatting
+          echo "$CHANGELOG" > /tmp/changelog.txt
+      
+      - name: Create GitHub Release
+        if: steps.check-version.outputs.version_exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.determine-version.outputs.version }}
+          name: Release v${{ steps.determine-version.outputs.version }}
+          body_path: /tmp/changelog.txt
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Publish success notification
+        if: steps.check-version.outputs.version_exists == 'false'
+        run: |
+          echo "🎉 Successfully published @code-name-jack/ngx-linkifyjs@${{ steps.determine-version.outputs.version }} to npm!"
+          echo "📦 View on npm: https://www.npmjs.com/package/@code-name-jack/ngx-linkifyjs/v/${{ steps.determine-version.outputs.version }}"
+          echo "📝 GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.determine-version.outputs.version }}"
+      
+      - name: Version already published
+        if: steps.check-version.outputs.version_exists == 'true'
+        run: |
+          echo "::warning::Version ${{ steps.determine-version.outputs.version }} already exists on npm. Skipping publish."
+          exit 0
+
