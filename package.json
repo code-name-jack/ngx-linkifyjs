@@ -25,8 +25,7 @@
     "linkify-plugin-mention": "^4.3.2",
     "linkify-string": "^4.3.2",
     "linkifyjs": "^4.3.2",
-    "tslib": "^2.8.1",
-    "zone.js": "~0.15.0"
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.8",
