@@ -10,17 +10,23 @@
     "test": "jest",
     "lint": "ng lint ngx-linkifyjs-v2",
     "release": "release-it",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "demo": "npm run build && ng serve demo",
+    "demo:build": "npm run build && ng build demo",
+    "demo:build:prod": "npm run build:prod && ng build demo --configuration production"
   },
   "private": true,
   "dependencies": {
     "@angular/common": "^20.3.9",
     "@angular/core": "^20.3.9",
+    "@angular/forms": "^20.3.9",
+    "@angular/router": "^20.3.9",
     "linkify-plugin-hashtag": "^4.3.2",
     "linkify-plugin-mention": "^4.3.2",
     "linkify-string": "^4.3.2",
     "linkifyjs": "^4.3.2",
-    "tslib": "^2.8.1"
+    "tslib": "^2.8.1",
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.8",
@@ -31,6 +37,7 @@
     "@angular-eslint/eslint-plugin-template": "^20.0.0",
     "@angular-eslint/schematics": "^20.0.0",
     "@angular-eslint/template-parser": "^20.0.0",
+    "@angular/build": "^20.3.8",
     "@angular/cli": "^20.3.8",
     "@angular/compiler": "^20.3.9",
     "@angular/compiler-cli": "^20.3.9",
@@ -53,21 +60,28 @@
     "roots": [
       "<rootDir>/projects/ngx-linkifyjs-v2/src"
     ],
-    "transform": {
-      "^.+\\.(ts|js|html)$": "ts-jest"
-    },
     "setupFilesAfterEnv": [
       "<rootDir>/projects/ngx-linkifyjs-v2/setup-jest.ts"
     ],
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "<rootDir>/projects/ngx-linkifyjs-v2/tsconfig.spec.json",
-        "stringifyContentPathRegex": "\\.html$",
-        "astTransformers": [
-          "jest-preset-angular/build/InlineFilesTransformer",
-          "jest-preset-angular/build/StripStylesTransformer"
-        ]
-      }
-    }
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|js|mjs)$": [
+        "jest-preset-angular",
+        {
+          "tsconfig": "<rootDir>/projects/ngx-linkifyjs-v2/tsconfig.spec.json",
+          "stringifyContentPathRegex": "\\.html$"
+        }
+      ]
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!.*\\.mjs$)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "html",
+      "js",
+      "json",
+      "mjs"
+    ]
   }
 }

@@ -1,409 +1,638 @@
-# ngx-linkifyjs-v2 - Angular 20 wrapper for linkifyjs -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs
+# ngx-linkifyjs
 
-[![npm version](https://badge.fury.io/js/ngx-linkifyjs.svg)](https://badge.fury.io/js/ngx-linkifyjs),
-[![npm](https://img.shields.io/badge/demo-online-ed1c46.svg)](https://anthonynahas.github.io/ngx-linkifyjs)
-[![Join the chat at (https://gitter.im/angular-material-extensions/Lobby](https://badges.gitter.im/ngx-auth-firebaseui/Lobby.svg)](https://gitter.im/angular-material-extensions/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![CircleCI branch](https://img.shields.io/circleci/project/github/AnthonyNahas/ngx-linkifyjs/master.svg?label=circleci)](https://circleci.com/gh/AnthonyNahas/ngx-linkifyjs)
-[![Build Status](https://travis-ci.org/AnthonyNahas/ngx-linkifyjs.svg?branch=master)](https://travis-ci.org/AnthonyNahas/ngx-linkifyjs)
-[![Coverage Status](https://coveralls.io/repos/github/AnthonyNahas/ngx-linkifyjs/badge.svg?branch=master)](https://coveralls.io/github/AnthonyNahas/ngx-linkifyjs?branch=master)
-[![dependency Status](https://david-dm.org/anthonynahas/ngx-linkifyjs/status.svg)](https://david-dm.org/anthonynahas/ngx-linkifyjs)
-[![devDependency Status](https://david-dm.org/anthonynahas/ngx-linkifyjs/dev-status.svg?branch=master)](https://david-dm.org/anthonynahas/ngx-linkifyjs#info=devDependencies)
-[![Greenkeeper Badge](https://badges.greenkeeper.io/anthonynahas/ngx-linkifyjs.svg)](https://greenkeeper.io/)
+[![npm version](https://badge.fury.io/js/ngx-linkifyjs.svg)](https://badge.fury.io/js/ngx-linkifyjs)
 [![license](https://img.shields.io/github/license/anthonynahas/ngx-linkifyjs.svg?style=flat-square)](https://github.com/AnthonyNahas/ngx-linkifyjs/blob/master/LICENSE)
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/gdi2290/awesome-angular)
 
+> **Angular 20+ wrapper for linkifyjs** - Automatically find and convert URLs, emails, hashtags, and mentions in text to HTML links.
 
 <p align="center">
   <img alt="ngx-linkifyjs demo" width="320px" style="text-align: center;" 
   src="https://cdn.jsdelivr.net/gh/anthonynahas/ngx-linkifyjs@master/assets/demo.gif">
 </p>
 
-## Built by and for developers :heart:
-Do you have any question or suggestion ? Please do not hesitate to contact us!
-Alternatively, provide a PR | open an appropriate issue [here](https://github.com/anthonynahas/ngx-linkifyjs/issues)
+## ✨ Features
 
-If you like this project, support [ngx-linkifyjs](https://github.com/anthonynahas/ngx-linkifyjs) 
-by starring :star: and sharing it :loudspeaker:
+- 🔗 **Auto-detect URLs** - Finds and linkifies URLs (with or without protocol)
+- 📧 **Email addresses** - Converts emails to `mailto:` links
+- #️⃣ **Hashtags** - Linkify hashtags for social media content
+- @ **Mentions** - Convert @mentions to links
+- 🎨 **Customizable** - Full control over link styling and behavior
+- 🚀 **Angular 20** - Built for modern Angular with standalone component support
+- 📦 **Tree-shakeable** - Optimized bundle size
+- 🔧 **TypeScript** - Full type safety
 
+## 🎮 Live Demo
 
+**Try it now!** Run the interactive demo locally:
 
-## Table of Contents
-- [Demo](#demo)
-- [Features](#features)
-- [Documentation](#documentation)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Config](#config)
-- [Run Demo App Locally](#run-demo-app-locally)
-- [Other Angular Libraries](#other-angular-libraries)
-- [Support](#support)
-- [License](#license)
+```bash
+git clone https://github.com/code-name-jack/ngx-linkifyjs-v2.git
+cd ngx-linkifyjs-v2
+npm install
+npm run demo
+```
 
-<a name="demo"/>
+Open `http://localhost:4200` to see:
+- 🎨 Interactive examples with live editing
+- 🔧 Service API demonstrations  
+- ⚙️ Configuration options showcase
+- 📝 Copy-paste code examples
 
-## Demo
+[View demo source code →](./projects/demo)
 
-View all the directives in action at https://anthonynahas.github.io/ngx-linkifyjs
+---
 
-<a name="documentation"/>
+## 📦 Installation
 
-## [Documentation](https://anthonynahas.github.io/ngx-linkifyjs/doc/index.html)
+### Option 1: Using Angular Schematics (Recommended)
 
-<a name="dependencies"/>
-
-## Dependencies
-* [Angular](https://angular.io) (*requires* Angular 2 or higher, tested with 7.x)
-
-<a name="installation"/>
-
-# Installation
-
-## 1. Install via *ng add*. (Recommended)
-
-Now add the library via the `angular schematics`
-```shell
+```bash
 ng add ngx-linkifyjs
 ```
 
-## 2. Install via *npm*. (Alternative) 
+### Option 2: Using npm
 
-Now install `ngx-linkifyjs` via:
-```shell
-npm i -s ngx-linkifyjs
+```bash
+npm install ngx-linkifyjs
 ```
 
 ---
-##### SystemJS
->**Note**:If you are using `SystemJS`, you should adjust your configuration to point to the UMD bundle.
-In your systemjs config file, `map` needs to tell the System loader where to look for `ngx-linkifyjs`:
-```js
-{
-  'ngx-linkifyjs';: 'node_modules/ngx-linkifyjs/bundles/ngx-linkifyjs.umd.js',
+
+## 🚀 Quick Start
+
+### For Standalone Components (Angular 14+)
+
+**1. Import the pipe in your component:**
+
+```typescript
+import { Component } from '@angular/core';
+import { NgxLinkifyjsPipe } from 'ngx-linkifyjs';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  imports: [NgxLinkifyjsPipe],
+  template: `
+    <div [innerHTML]="text | linkify"></div>
+  `
+})
+export class ExampleComponent {
+  text = 'Visit https://github.com or email info@example.com';
 }
 ```
+
+**2. Using the service:**
+
+```typescript
+import { Component } from '@angular/core';
+import { NgxLinkifyjsService } from 'ngx-linkifyjs';
+
+@Component({
+  selector: 'app-example',
+  standalone: true,
+  providers: [NgxLinkifyjsService]
+})
+export class ExampleComponent {
+  constructor(private linkifyService: NgxLinkifyjsService) {
+    // Find all links
+    const links = this.linkifyService.find('Visit github.com');
+    // Output: [{ type: 'url', value: 'github.com', href: 'http://github.com' }]
+    
+    // Test if text contains links
+    const hasLinks = this.linkifyService.test('example.com'); // true
+    
+    // Convert text to HTML
+    const html = this.linkifyService.linkify('Visit example.com');
+  }
+}
+```
+
+### For NgModule-based Applications
+
+```typescript
+import { NgModule } from '@angular/core';
+import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
+
+@NgModule({
+  imports: [
+    NgxLinkifyjsModule.forRoot({
+      enableHash: true,     // Enable hashtag detection
+      enableMention: true   // Enable @mention detection
+    })
+  ]
+})
+export class AppModule { }
+```
+
 ---
 
-Once installed you need to import the main module:
-```js
-import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
-```
-The only remaining part is to list the imported module in your application module. The exact method will be slightly
-different for the root (top-level) module for which you should end up with the code similar to (notice ` NgxLinkifyjsModule .forRoot()`):
-```typescript
-import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
+## 📖 Usage Guide
 
-@NgModule({
-  declarations: [AppComponent, ...],
-  imports: [NgxLinkifyjsModule.forRoot(), ...],  
-  bootstrap: [AppComponent]
-})
-export class AppModule {
-}
-```
+### Using the Pipe
 
-Other modules in your application can simply import ` NgxLinkifyjsModule `:
-
-```js
-import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
-
-@NgModule({
-  declarations: [OtherComponent, ...],
-  imports: [NgxLinkifyjsModule, ...], 
-})
-export class OtherModule {
-}
-```
-
-<a name="usage"/>
-
-## Usage
-
-Once the library is imported, you can use its components, directives and pipes in your Angular application:
-
-### Options
-
-`ngx-linkifyjs` provides an appropriate option interface called `NgxLinkifyOptions` to access [the native options of the linkifyjs library](https://soapbox.github.io/linkifyjs/docs/options.html)
-and all of them are optional
-- Default values
-
-```typescript
-
-import { NgxLinkifyOptions } from 'ngx-linkifyjs';
-
-  const options: NgxLinkifyOptions =
-   {
-    attributes: null,
-    className: 'linkified',
-    defaultProtocol: 'http',
-    events: null,
-    format: function (value, type) {
-      return value;
-    },
-    formatHref: function (href, type) {
-      return href;
-    },
-    ignoreTags: [],
-    nl2br: false,
-    tagName: 'a',
-    target: {
-      url: '_blank'
-    },
-    validate: true
-  };
-```
-
-### Pipe
-
-`{{text | linkify}}`
+The `linkify` pipe transforms text into linkified HTML:
 
 ```html
-<span [innerHTML]="'Linkify the following URL: https://github.com/anthonynahas/ngx-linkifyjs and share it <3' | linkify"></span>
+<!-- Basic usage -->
+<p [innerHTML]="'Visit https://example.com' | linkify"></p>
+
+<!-- With custom options -->
+<p [innerHTML]="text | linkify:options"></p>
 ```
 
-**result**: Linkify the following URL: [https://github.com/anthonynahas/ngx-linkifyjs](https://github.com/anthonynahas/ngx-linkifyjs) and share it <3
-
-if you prefer to provide your own option to the `pipe`, you can use it like the following:
-
-- `{{text | linkify: 'options' }}` 
-- `{{text | linkify: '{/*your options*/}' }}` 
-- `{{text | linkify: '{target {url: "_self" }}' }}`
-
-
-### Service
-
-Inject the `NgxLinkifyjsService` service
-
 ```typescript
-import {NgxLinkifyjsService, Link, LinkType} from 'ngx-linkifyjs';
+import { NgxLinkifyOptions } from 'ngx-linkifyjs';
 
-constructor(public; NgxLinkifyjsService;) {
- } 
+export class MyComponent {
+  text = 'Check out github.com and follow @angular!';
+  
+  options: NgxLinkifyOptions = {
+    className: 'custom-link',
+    target: { url: '_blank' },
+    defaultProtocol: 'https'
+  };
 }
 ```
 
-<a name="linkify_method"/>
+### Using the Service
 
-#### linkify _(text: string, options?: NgxLinkifyOptions): string_
+The `NgxLinkifyjsService` provides programmatic access to linkify functionality:
 
-Convert a basic text string to a valid linkified text
+#### 1️⃣ `linkify(text: string, options?: NgxLinkifyOptions): string`
 
-**Params**
-
-*  **`text`** : _`String`_ Text to linkify --> to convert with links
-*  **`options`** : _`NgxLinkifyjsService`_ options to pass it to the linkifyjs library and it's optional
-
-**Returns** _`String`_  converted text with links
-
+Converts text to linkified HTML string.
 
 ```typescript
-import {NgxLinkifyjsService, Link, LinkType, NgxLinkifyOptions} from 'ngx-linkifyjs';
-
-constructor(public; NgxLinkifyjsService;) {
-  
-  const options: NgxLinkifyOptions =
-     {
-      className: 'linkifiedYES',
-      target : {
-          url : '_self'
-        }
-      };
-  
-  this.linkifyService.linkify('For help with GitHub.com, please email support@github.com');
-  // result 1 --> see below
-  
-  this.linkifyService.linkify('For help with GitHub.com, please email support@github.com', options);
-    // result 2 --> see below
- } 
-}
-```
-
-result 1
-```typescript
-'For help with <a href=\"http://github.com\" class=\"linkified\" target=\"_blank\">GitHub.com</a>, please email <a href=\"mailto:support@github.com\" class=\"linkified\">support@github.com</a>'
-```
-
-result 2
-```typescript
-'For help with <a href=\"http://github.com\" class=\"linkifiedYES\" target=\"_self\">GitHub.com</a>, please email <a href=\"mailto:support@github.com\" class=\"linkifiedYES\">support@github.com</a>'
-```
-
-#### `find` method
-
-Finds all links in the given string
-
-**Params**
-
-*  **`text`** : _`String`_ search text string
-
-**Returns** _`Array<Link>`_ List of links where each element is a hash with properties type, value, and href:
-
-
-* **type** is the type of entity found. Possible values are
-  - `'url'`
-  - `'email'`
-  - `'hashtag'` (if Hashtag is enabled via config/default `true`)
-  - `'mention'` (if Mention is enabled via config/default `true`)
-* **value** is the original entity substring.
-* **href** should be the value of this link's `href` attribute.
-
-```typescript
-import {Component, OnInit} from '@angular/core';
-import {NgxLinkifyjsService, Link, LinkType} from 'ngx-linkifyjs';
-
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
-})
-export class HomeComponent {
-    
-  constructor(public linkifyService: NgxLinkifyjsService) {
-    const foundLinks: Link[] = this.linkifyService.find('Any links to github.com here? If not, contact test@example.com');
-    
-    // result - output --> see below 
-  }
-  
-}
-```
-
-```typescript
-// Result
-[
+const html = this.linkifyService.linkify(
+  'Visit github.com or email support@example.com',
   {
-    type: LinkType.URL,
-    value: 'github.com',
-    href: 'http://github.com'
-  },
-  {
-    type: LinkType.EMAIL,
-    value: 'test@example.com',
-    href: 'mailto:test@example.com'
+    className: 'my-link',
+    target: { url: '_blank' }
   }
-]
+);
+// Output: 'Visit <a href="http://github.com" class="my-link" target="_blank">github.com</a> or email <a href="mailto:support@example.com" class="my-link">support@example.com</a>'
 ```
 
-#### `test` method
+#### 2️⃣ `find(text: string): Link[]`
 
-Is the given string a link? Not to be used for strict validation - See [Caveats](caveats.html)
-
-**Params**
-
-* **`value`** : _`String`_ |  _`Array<String>`_  Test string
-
-**Returns** _`Boolean`_
+Finds all links in text and returns an array of link objects.
 
 ```typescript
-import {Component, OnInit} from '@angular/core';
-import {NgxLinkifyjsService} from 'ngx-linkifyjs';
+const links = this.linkifyService.find(
+  'Visit github.com or email test@example.com #angular'
+);
+// Output:
+// [
+//   { type: 'url', value: 'github.com', href: 'http://github.com' },
+//   { type: 'email', value: 'test@example.com', href: 'mailto:test@example.com' },
+//   { type: 'hashtag', value: '#angular', href: '#angular' }
+// ]
+```
 
-@Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
-})
-export class HomeComponent {
-    
-  constructor(public linkifyService: NgxLinkifyjsService) {
-    this.linkifyService.test('github.com'); // return true
-    this.linkifyService.test('dev@example.com'); // return true
-    this.linkifyService.test(['github.com', 'email']); // return false
-    this.linkifyService.test('helloWorld'); // return false
-  }
+#### 3️⃣ `test(value: string | string[]): boolean`
+
+Tests if a string (or all strings in an array) contains valid links.
+
+```typescript
+this.linkifyService.test('github.com');              // true
+this.linkifyService.test('hello world');             // false
+this.linkifyService.test(['github.com', 'test.com']); // true
+this.linkifyService.test(['github.com', 'hello']);    // false
+```
+
+---
+
+## ⚙️ Configuration Options
+
+### Available Options (`NgxLinkifyOptions`)
+
+All options are optional and follow the [linkifyjs options](https://linkify.js.org/docs/options.html):
+
+```typescript
+interface NgxLinkifyOptions {
+  /**
+   * Add custom attributes to links
+   */
+  attributes?: Record<string, any>;
+  
+  /**
+   * CSS class to add to links (default: 'linkified')
+   */
+  className?: string;
+  
+  /**
+   * Default protocol for URLs without one (default: 'http')
+   */
+  defaultProtocol?: string;
+  
+  /**
+   * Event handlers for links
+   */
+  events?: Record<string, (e: Event) => void>;
+  
+  /**
+   * Format the link text
+   */
+  format?: (value: string, type: string) => string;
+  
+  /**
+   * Format the href attribute
+   */
+  formatHref?: (href: string, type: string) => string;
+  
+  /**
+   * HTML tags to ignore when linkifying
+   */
+  ignoreTags?: string[];
+  
+  /**
+   * Convert newlines to <br> tags
+   */
+  nl2br?: boolean;
+  
+  /**
+   * HTML tag to use for links (default: 'a')
+   */
+  tagName?: string;
+  
+  /**
+   * Target attribute for links
+   */
+  target?: { url: string };
+  
+  /**
+   * Validate links before linkifying
+   */
+  validate?: boolean;
 }
 ```
 
-<a name="config"/>
-
-#### Enable/Disable the hash and mention
-
-The config argument is 100% optional, otherwise we will take the default values `true`
+### Example: Custom Configuration
 
 ```typescript
+import { NgxLinkifyOptions } from 'ngx-linkifyjs';
+
+export class MyComponent {
+  options: NgxLinkifyOptions = {
+    className: 'fancy-link',
+    target: { url: '_blank' },
+    defaultProtocol: 'https',
+    
+    // Customize link text
+    format: (value, type) => {
+      if (type === 'url' && value.length > 50) {
+        return value.slice(0, 50) + '…';
+      }
+      return value;
+    },
+    
+    // Customize href
+    formatHref: (href, type) => {
+      if (type === 'hashtag') {
+        return 'https://twitter.com/hashtag/' + href.slice(1);
+      }
+      return href;
+    },
+    
+    // Add custom attributes
+    attributes: {
+      rel: 'noopener noreferrer'
+    }
+  };
+}
+```
+
+### Global Configuration
+
+Configure hashtag and mention support globally:
+
+```typescript
+// For standalone apps (in app.config.ts)
+import { ApplicationConfig } from '@angular/core';
+import { NgxLinkifyjsService, NgxLinkifyjsConfigToken } from 'ngx-linkifyjs';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    NgxLinkifyjsService,
+    {
+      provide: NgxLinkifyjsConfigToken,
+      useValue: {
+        enableHash: true,     // Enable #hashtag detection
+        enableMention: true   // Enable @mention detection
+      }
+    }
+  ]
+};
+
+// For NgModule apps
 import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
 
 @NgModule({
-  declarations: [AppComponent, ...],
-  imports: [NgxLinkifyjsModule.forRoot(
-                  {
-                    enableHash: false, // optional - default true
-                    enableMention: false // optional - default true
-                  }), ...],  
-  bootstrap: [AppComponent]
+  imports: [
+    NgxLinkifyjsModule.forRoot({
+      enableHash: false,      // Disable hashtags
+      enableMention: false    // Disable mentions
+    })
+  ]
 })
-export class AppModule {
+export class AppModule { }
+```
+
+---
+
+## 🎨 Styling Links
+
+Add custom CSS to style your linkified links:
+
+```css
+/* Default linkified class */
+.linkified {
+  color: #0066cc;
+  text-decoration: underline;
+}
+
+.linkified:hover {
+  color: #0052a3;
+}
+
+/* Custom class from options */
+.custom-link {
+  color: #667eea;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.custom-link:hover {
+  border-bottom-color: #667eea;
 }
 ```
 
-take a look @ [@angular-material-extensions/link-preview](https://github.com/angular-material-extensions/link-preview) which is using `ngx-linkifyjs`
+---
 
-## Run Demo App Locally
+## 🔍 Link Types
 
-- [clone this repo](https://github.com/AnthonyNahas/ngx-linkifyjs.git) by running
-```bash
-$ git clone https://github.com/AnthonyNahas/ngx-linkifyjs.git
+The library detects four types of links:
+
+| Type | Example | Output |
+|------|---------|--------|
+| **URL** | `https://example.com` | `<a href="https://example.com">...</a>` |
+| **Email** | `user@example.com` | `<a href="mailto:user@example.com">...</a>` |
+| **Hashtag** | `#angular` | `<a href="#angular">#angular</a>` |
+| **Mention** | `@username` | `<a href="/username">@username</a>` |
+
+> 💡 **Note:** Hashtags and mentions are enabled by default but can be disabled in configuration.
+
+---
+
+## 📱 Real-World Examples
+
+### Social Media Posts
+
+```typescript
+@Component({
+  template: `
+    <div class="post" [innerHTML]="post | linkify:socialOptions"></div>
+  `
+})
+export class PostComponent {
+  post = 'Check out the new @angular release! 🚀 #Angular20 https://angular.io';
+  
+  socialOptions: NgxLinkifyOptions = {
+    target: { url: '_blank' },
+    formatHref: (href, type) => {
+      if (type === 'hashtag') {
+        return `https://twitter.com/hashtag/${href.slice(1)}`;
+      }
+      if (type === 'mention') {
+        return `https://twitter.com/${href.slice(1)}`;
+      }
+      return href;
+    }
+  };
+}
 ```
 
-- setup the ngx-linkifyjs package
+### Comment Section
 
-```bash
-$ gulp steup
+```typescript
+@Component({
+  template: `
+    <div class="comment" 
+         *ngFor="let comment of comments"
+         [innerHTML]="comment.text | linkify:commentOptions">
+    </div>
+  `
+})
+export class CommentsComponent {
+  comments = [
+    { text: 'Great article! See more at example.com' },
+    { text: 'Contact me at john@example.com for details' }
+  ];
+  
+  commentOptions: NgxLinkifyOptions = {
+    className: 'comment-link',
+    target: { url: '_blank' },
+    attributes: {
+      rel: 'nofollow noopener'
+    }
+  };
+}
 ```
 
-- navigate to the demo app directory
-```bash
-$ cd demo
+### Chat Application
+
+```typescript
+@Component({
+  selector: 'chat-message',
+  template: `
+    <div class="message" [innerHTML]="message | linkify"></div>
+  `
+})
+export class ChatMessageComponent {
+  @Input() message!: string;
+}
 ```
 
-- install the dependencies and run the app locally
-```bash
-$ npm i && npm start
+---
+
+## 🧪 Testing
+
+When testing components that use ngx-linkifyjs:
+
+```typescript
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgxLinkifyjsPipe, NgxLinkifyjsService } from 'ngx-linkifyjs';
+
+describe('MyComponent', () => {
+  let component: MyComponent;
+  let fixture: ComponentFixture<MyComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MyComponent, NgxLinkifyjsPipe],
+      providers: [NgxLinkifyjsService]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MyComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should linkify URLs', () => {
+    component.text = 'Visit example.com';
+    fixture.detectChanges();
+    
+    const element = fixture.nativeElement;
+    expect(element.querySelector('a')).toBeTruthy();
+    expect(element.querySelector('a').href).toContain('example.com');
+  });
+});
 ```
 
-- the app is now hosted by `http://localhost:4200/`
+---
+
+## 📚 API Reference
+
+### Exports
+
+```typescript
+// Module
+export { NgxLinkifyjsModule }
+
+// Standalone pipe
+export { NgxLinkifyjsPipe }
+
+// Service
+export { NgxLinkifyjsService }
+
+// Types & Interfaces
+export { NgxLinkifyOptions }
+export { NgxLinkifyjsConfig }
+export { Link }
+export { LinkType }
+
+// Tokens
+export { NgxLinkifyjsConfigToken }
+export { DEFAULT_CONFIG }
+```
+
+### Types
+
+```typescript
+interface Link {
+  type: string;    // 'url' | 'email' | 'hashtag' | 'mention'
+  value: string;   // Original text
+  href: string;    // Generated href attribute
+}
+
+enum LinkType {
+  URL = 'url',
+  EMAIL = 'email',
+  HASHTAG = 'hashtag',
+  MENTION = 'mention'
+}
+
+interface NgxLinkifyjsConfig {
+  enableHash?: boolean;     // Enable hashtag detection (default: true)
+  enableMention?: boolean;  // Enable mention detection (default: true)
+}
+```
 
 ---
 
+## 🎯 Demo Application
 
-<a name="other-angular-libraries"/>
+The repository includes a comprehensive demo application built with Angular 20.
 
-## Other Angular Libraries
-- [ngx-auth-firebaseui](https://github.com/anthonynahas/ngx-auth-firebaseui)
-- [@firebaseui/ng-bootstrap](https://github.com/firebaseui/ng-bootstrap)
-- [@angular-material-extensions/password-strength](https://github.com/angular-material-extensions/password-strength)
-- [@angular-material-extensions/link-preview](https://github.com/angular-material-extensions/link-preview)
-- [@angular-material-extensions/select-country](https://github.com/angular-material-extensions/select-country)
-- [@angular-material-extensions/pages](https://github.com/angular-material-extensions/pages)
-- [@angular-material-extensions/contacts](https://github.com/angular-material-extensions/contacts)
-- [@angular-material-extensions/faq](https://github.com/angular-material-extensions/faq)
-- [@angular-material-extensions/jumbotron](https://github.com/angular-material-extensions/jumbotron)
-- [@angular-material-extensions/google-maps-autocomplete](https://github.com/angular-material-extensions/google-maps-autocomplete)
-- [@angular-material-extensions/combination-generator](https://github.com/angular-material-extensions/combination-generator)
+### Run the Demo
+
+```bash
+# Clone and setup
+git clone https://github.com/code-name-jack/ngx-linkifyjs-v2.git
+cd ngx-linkifyjs-v2
+npm install
+
+# Run demo (builds library + starts dev server)
+npm run demo
+```
+
+Visit `http://localhost:4200` to see:
+
+- 🎨 **Interactive Examples** - Try the pipe with live editing
+- 🔧 **Service Demos** - See all service methods in action
+- 📝 **Code Snippets** - Copy-paste ready examples
+- ⚙️ **Configuration** - Explore all available options
+- 🎭 **Live Testing** - Test your own text in real-time
+
+### Build Demo for Production
+
+```bash
+npm run demo:build:prod
+```
+
+The built demo will be in `dist/demo/`
+
+📖 [Read more about the demo →](./projects/demo/README.md)
 
 ---
 
-<a name="support"/>
+## 🤝 Contributing
 
-## Support
-+ Drop an email to: [Anthony Nahas](mailto:anthony.na@hotmail.de)
-+ or open an appropriate [issue](https://github.com/anthonynahas/ngx-linkifyjs/issues)
-+ let us chat on [Gitter](https://gitter.im/angular-material-extensions/Lobby)
- 
- Built by and for developers :heart: we will help you :punch:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
----
-
----
-
-![jetbrains logo](assets/jetbrains-variant-4_logos/jetbrains-variant-4.png)
-
-This project is supported by [jetbrains](https://www.jetbrains.com/) with 1 ALL PRODUCTS PACK OS LICENSE incl. [webstorm](https://www.jetbrains.com/webstorm)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ---
 
-<a name="license"/>
+## 🐛 Issues & Support
 
-## License
+- 🐛 [Report bugs](https://github.com/code-name-jack/ngx-linkifyjs-v2/issues)
+- 💡 [Request features](https://github.com/code-name-jack/ngx-linkifyjs-v2/issues)
+- 💬 [Ask questions](https://github.com/code-name-jack/ngx-linkifyjs-v2/discussions)
 
-Copyright (c) 2018 Anthony Nahas
-Copyright (c) 2022 Ethan Gerardot
-Licensed under the MIT License (MIT)
+---
+
+## 📄 License
+
+Copyright (c) 2018 Anthony Nahas  
+Copyright (c) 2022 Ethan Gerardot  
+Copyright (c) 2025 Code Name Jack
+
+Licensed under the [MIT License](LICENSE)
+
+---
+
+## 🌟 Show Your Support
+
+If this project helped you, please consider:
+
+- ⭐ Starring the repository
+- 🐛 Reporting bugs
+- 💡 Suggesting features
+- 📢 Sharing with others
+
+---
+
+## 🔗 Related Projects
+
+- [@angular-material-extensions/link-preview](https://github.com/angular-material-extensions/link-preview) - Link preview component using ngx-linkifyjs
+- [linkifyjs](https://linkify.js.org/) - The underlying linkify library
+
+---
+
+<p align="center">
+  Made with ❤️ for the Angular community
+</p>
+
+<p align="center">
+  <a href="https://www.jetbrains.com">
+    <img src="assets/jetbrains-variant-4_logos/jetbrains-variant-4.png" alt="JetBrains" height="50">
+  </a>
+  <br>
+  <sub>Supported by JetBrains with 1 ALL PRODUCTS PACK OS LICENSE</sub>
+</p>

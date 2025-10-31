@@ -91,6 +91,19 @@
     "setupFilesAfterEnv": [
       "<rootDir>/../setup-jest.ts"
     ],
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.(ts|js|mjs)$": [
+        "jest-preset-angular",
+        {
+          "tsconfig": "<rootDir>/tsconfig.spec.json",
+          "stringifyContentPathRegex": "\\.html$"
+        }
+      ]
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!.*\\.mjs$)"
+    ],
     "coverageReporters": [
       "lcov",
       "text"
@@ -99,57 +112,13 @@
       "/node_modules/",
       "/config",
       "/dist/"
-    ]
-  },
-  "globals": {
-    "ts-jest": {
-      "tsConfig": "<rootDir>/tsconfig.spec.json",
-      "stringifyContentPathRegex": "\\.html$",
-      "astTransformers": [
-        "jest-preset-angular/build/InlineFilesTransformer",
-        "jest-preset-angular/build/StripStylesTransformer"
-      ]
-    }
-  },
-  "greenkeeper": {
-    "ignore": [
-      "@angular/core",
-      "@angular/common",
-      "@angular/compiler",
-      "@angular/platform-server",
-      "@angular/platform-browser",
-      "@angular/platform-browser-dynamic",
-      "@angular/compiler-cli",
-      "zone.js",
-      "rxjs",
-      "tslint",
-      "gulp-tslint",
-      "typescript",
-      "awesome-typescript-loader",
-      "codelyzer",
-      "@angular/animations",
-      "linkifyjs",
-      "@types/jasmine",
-      "@types/jest",
-      "@types/node",
-      "conventional-github-releaser",
-      "rollup-plugin-uglify"
-    ]
-  },
-  "commitplease": {
-    "style": "angular",
-    "types": [
-      "feat",
-      "fix",
-      "docs",
-      "style",
-      "refactor",
-      "perf",
-      "test",
-      "chore",
-      "revert",
-      "demo"
     ],
-    "scope": "\\S+.*"
+    "moduleFileExtensions": [
+      "ts",
+      "html",
+      "js",
+      "json",
+      "mjs"
+    ]
   }
 }

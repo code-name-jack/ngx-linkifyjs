@@ -1,9 +1,4 @@
-import {CommonModule} from '@angular/common';
-import {Inject, InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
-// TODO REMOVE ME
-// import * as linkify from 'linkifyjs';
-// import hashtag from 'linkify-plugin-hashtag';
-// import mention from 'linkify-plugin-mention';
+import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
 
 import {NgxLinkifyjsService} from './service/ngx-linkifyjs.service';
 import {NgxLinkifyjsPipe} from './pipes/ngx-linkifyjs.pipe';
@@ -20,39 +15,42 @@ export {NgxLinkifyjsService} from './service/ngx-linkifyjs.service';
 export const NgxLinkifyjsConfigToken = new InjectionToken<NgxLinkifyjsConfig>('NgxLinkifyjsConfig');
 export const DEFAULT_CONFIG: NgxLinkifyjsConfig = {enableHash: true, enableMention: true};
 
+// Conditionally import plugins based on configuration
+let pluginsLoaded = false;
+
+function loadPlugins(config: NgxLinkifyjsConfig) {
+  if (pluginsLoaded) return;
+  
+  if (config?.enableHash) {
+    import('linkify-plugin-hashtag').catch(err => console.error('Failed to load hashtag plugin:', err));
+  }
+
+  if (config?.enableMention) {
+    import('linkify-plugin-mention').catch(err => console.error('Failed to load mention plugin:', err));
+  }
+  
+  pluginsLoaded = true;
+}
+
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [NgxLinkifyjsPipe],
-  declarations: [NgxLinkifyjsPipe]
+  imports: [NgxLinkifyjsPipe],
+  exports: [NgxLinkifyjsPipe]
 })
 export class NgxLinkifyjsModule {
 
   static forRoot(config: NgxLinkifyjsConfig = DEFAULT_CONFIG): ModuleWithProviders<NgxLinkifyjsModule> {
+    loadPlugins(config);
+    
     return {
       ngModule: NgxLinkifyjsModule,
-      providers:
-        [
-          NgxLinkifyjsService,
-          {
-            provide: NgxLinkifyjsConfigToken,
-            useValue: config
-          },
-        ]
+      providers: [
+        NgxLinkifyjsService,
+        {
+          provide: NgxLinkifyjsConfigToken,
+          useValue: config
+        }
+      ]
     };
-  }
-
-  constructor(@Inject(NgxLinkifyjsConfigToken)
-              public config: NgxLinkifyjsConfig) {
-    // TODO REMOVE ME
-    // if (config.enableHash) {
-    //   hashtag(linkify);
-    // }
-    //
-    // if (config.enableMention) {
-    //   mention(linkify);
-    // }
   }
 
 }

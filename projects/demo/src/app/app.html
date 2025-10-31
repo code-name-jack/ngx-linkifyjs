@@ -1,0 +1,179 @@
+<div class="container">
+  <header class="header">
+    <h1>{{ title }}</h1>
+    <p class="subtitle">Angular 20 wrapper for linkifyjs - Automatically detect and linkify URLs, emails, hashtags, and mentions</p>
+    <div class="badges">
+      <a href="https://github.com/code-name-jack/ngx-linkifyjs-v2" target="_blank" class="badge">
+        <span>⭐ GitHub</span>
+      </a>
+      <span class="badge">Angular 20+</span>
+      <span class="badge">TypeScript</span>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Pipe Demo -->
+    <section class="demo-section">
+      <h2>🎨 Pipe Usage Demo</h2>
+      <p class="description">Transform text to linkified HTML using the <code>linkify</code> pipe</p>
+      
+      <div class="example-box">
+        <h3>Example Text:</h3>
+        <div class="code-block">{{ sampleText }}</div>
+        
+        <h3>Linkified Output:</h3>
+        <div class="output-box" [innerHTML]="sampleText | linkify:linkifyOptions"></div>
+      </div>
+
+      <div class="code-example">
+        <h4>Code:</h4>
+        <pre><code>&lt;div [innerHTML]="text | linkify"&gt;&lt;/div&gt;
+
+// With options
+&lt;div [innerHTML]="text | linkify:options"&gt;&lt;/div&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- Service Demo -->
+    <section class="demo-section">
+      <h2>🔧 Service Usage Demo</h2>
+      <p class="description">Use the <code>NgxLinkifyjsService</code> to find, test, and linkify text programmatically</p>
+      
+      <div class="example-box">
+        <h3>Interactive Testing:</h3>
+        
+        <div class="input-group">
+          <label for="custom-text">Enter text with URLs/emails:</label>
+          <textarea 
+            id="custom-text"
+            [(ngModel)]="customText" 
+            (ngModelChange)="findLinks()"
+            rows="3"
+            placeholder="Type some text with URLs or emails..."></textarea>
+        </div>
+
+        <div class="results">
+          <h4>Found Links: ({{ foundLinks.length }})</h4>
+          <div class="links-list">
+            @if (foundLinks.length > 0) {
+              @for (link of foundLinks; track link.href) {
+                <div class="link-item">
+                  <span class="link-type">{{ link.type }}</span>
+                  <span class="link-value">{{ link.value }}</span>
+                  <a [href]="link.href" target="_blank" class="link-href">{{ link.href }}</a>
+                </div>
+              }
+            } @else {
+              <p class="no-links">No links found. Try typing a URL or email address!</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="code-example">
+        <h4>Code:</h4>
+        <pre><code>// Inject the service
+constructor(private linkifyService: NgxLinkifyjsService) {{ '{' }}{{ '}' }}
+
+// Find all links
+const links = this.linkifyService.find(text);
+// Returns: [{{ '{' }} type: 'url', value: 'example.com', href: 'http://example.com' {{ '}' }}]
+
+// Test if text contains links
+const isLink = this.linkifyService.test('example.com'); // true
+
+// Convert text to linkified HTML
+const html = this.linkifyService.linkify(text, options);</code></pre>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="demo-section features">
+      <h2>✨ Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔗</div>
+          <h3>URLs</h3>
+          <p>Automatically detect and linkify URLs</p>
+          <div class="feature-example">
+            <span [innerHTML]="'Visit example.com or https://github.com' | linkify"></span>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📧</div>
+          <h3>Emails</h3>
+          <p>Convert email addresses to mailto links</p>
+          <div class="feature-example">
+            <span [innerHTML]="'Contact us at support@example.com' | linkify"></span>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">#️⃣</div>
+          <h3>Hashtags</h3>
+          <p>Linkify hashtags for social media</p>
+          <div class="feature-example">
+            <span [innerHTML]="'Check out #Angular and #TypeScript' | linkify"></span>
+          </div>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">@</div>
+          <h3>Mentions</h3>
+          <p>Convert @mentions to links</p>
+          <div class="feature-example">
+            <span [innerHTML]="'Follow @angular for updates' | linkify"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Installation -->
+    <section class="demo-section">
+      <h2>📦 Installation</h2>
+      <div class="install-box">
+        <h3>Using ng add (Recommended):</h3>
+        <pre><code>ng add ngx-linkifyjs</code></pre>
+        
+        <h3>Or using npm:</h3>
+        <pre><code>npm install ngx-linkifyjs</code></pre>
+      </div>
+    </section>
+
+    <!-- Usage -->
+    <section class="demo-section">
+      <h2>🚀 Quick Start</h2>
+      <div class="code-example">
+        <h3>1. Import in your component (Standalone):</h3>
+        <pre><code>import {{ '{' }} NgxLinkifyjsPipe {{ '}' }} from 'ngx-linkifyjs';
+
+@Component({{ '{' }}
+  selector: 'app-root',
+  imports: [NgxLinkifyjsPipe],
+  template: `&lt;div [innerHTML]="text | linkify"&gt;&lt;/div&gt;`
+{{ '}' }})
+export class AppComponent {{ '{' }}
+  text = 'Visit https://example.com';
+{{ '}' }}</code></pre>
+
+        <h3>2. Or use NgModule:</h3>
+        <pre><code>import {{ '{' }} NgxLinkifyjsModule {{ '}' }} from 'ngx-linkifyjs';
+
+@NgModule({{ '{' }}
+  imports: [
+    NgxLinkifyjsModule.forRoot({{ '{' }}
+      enableHash: true,
+      enableMention: true
+    {{ '}' }})
+  ]
+{{ '}' }})
+export class AppModule {{ '{' }} {{ '}' }}</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built with ❤️ using Angular 20 | <a href="https://github.com/code-name-jack/ngx-linkifyjs-v2" target="_blank">View on GitHub</a></p>
+  </footer>
+</div>
