@@ -89,7 +89,7 @@ jobs:
 
       - name: Publish to NPM
         if: steps.check-version.outputs.version_exists == 'false'
-        run: npm publish "${DIST_DIR}" --access public
+        run: npm publish "./${DIST_DIR}" --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
