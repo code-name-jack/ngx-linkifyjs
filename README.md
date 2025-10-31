@@ -1,4 +1,4 @@
-# ngx-linkifyjs-v2 - Angular 17 wrapper for linkifyjs -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs
+# ngx-linkifyjs-v2 - Angular 20 wrapper for linkifyjs -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs
 
 [![npm version](https://badge.fury.io/js/ngx-linkifyjs.svg)](https://badge.fury.io/js/ngx-linkifyjs),
 [![npm](https://img.shields.io/badge/demo-online-ed1c46.svg)](https://anthonynahas.github.io/ngx-linkifyjs)
@@ -407,4 +407,3 @@ This project is supported by [jetbrains](https://www.jetbrains.com/) with 1 ALL 
 Copyright (c) 2018 Anthony Nahas
 Copyright (c) 2022 Ethan Gerardot
 Licensed under the MIT License (MIT)
-
