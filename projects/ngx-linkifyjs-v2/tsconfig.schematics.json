@@ -22,14 +22,17 @@
     "strictNullChecks": true,
     "target": "es6",
     "types": [
-      "jasmine",
       "node"
     ]
   },
   "include": [
-    "schematics/**/*"
+    "schematics/ng-add/**/*",
+    "schematics/helpers/dependencies.ts",
+    "schematics/helpers/index.ts",
+    "schematics/collection.json"
   ],
   "exclude": [
-    "schematics/*/files/**/*"
+    "schematics/helpers/angular/**/*",
+    "schematics/helpers/material/**/*"
   ]
 }

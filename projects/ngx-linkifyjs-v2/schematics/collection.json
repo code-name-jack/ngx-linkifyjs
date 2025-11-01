@@ -2,8 +2,9 @@
   "$schema": "~node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
     "ng-add": {
-      "description": "Installs and injects the@angular-material-extensions/password-strength library",
-      "factory": "./ng-add/index"
+      "description": "Installs @code-name-jack/ngx-linkifyjs package",
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./ng-add/schema.json"
     }
   }
 }
