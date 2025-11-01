@@ -173,6 +173,23 @@ describe('NgxLinkifyjsService', () => {
   it('should return false when the array does not contain only links', inject([NgxLinkifyjsService], (service: NgxLinkifyjsService) => {
     expect(service.test(['github.com', 'email'])).toBeFalsy();
   }));
+
+  // Null/undefined handling tests
+  it('should return empty string for null input', inject([NgxLinkifyjsService], (service: NgxLinkifyjsService) => {
+    expect(service.linkify(null as any)).toBe('');
+  }));
+
+  it('should return empty string for undefined input', inject([NgxLinkifyjsService], (service: NgxLinkifyjsService) => {
+    expect(service.linkify(undefined as any)).toBe('');
+  }));
+
+  it('should return empty array for null input in find', inject([NgxLinkifyjsService], (service: NgxLinkifyjsService) => {
+    expect(service.find(null as any)).toEqual([]);
+  }));
+
+  it('should return empty array for undefined input in find', inject([NgxLinkifyjsService], (service: NgxLinkifyjsService) => {
+    expect(service.find(undefined as any)).toEqual([]);
+  }));
 });
 
 

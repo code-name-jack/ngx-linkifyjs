@@ -146,7 +146,7 @@ const html = this.linkifyService.linkify(text, options);</code></pre>
       <h2>🚀 Quick Start</h2>
       <div class="code-example">
         <h3>1. Import in your component (Standalone):</h3>
-        <pre><code>import {{ '{' }} NgxLinkifyjsPipe {{ '}' }} from 'ngx-linkifyjs';
+        <pre><code>import {{ '{' }} NgxLinkifyjsPipe {{ '}' }} from '@code-name-jack/ngx-linkifyjs';
 
 @Component({{ '{' }}
   selector: 'app-root',
@@ -157,18 +157,18 @@ export class AppComponent {{ '{' }}
   text = 'Visit https://example.com';
 {{ '}' }}</code></pre>
 
-        <h3>2. Or use NgModule:</h3>
-        <pre><code>import {{ '{' }} NgxLinkifyjsModule {{ '}' }} from 'ngx-linkifyjs';
+        <h3>2. Configure in app.config.ts:</h3>
+        <pre><code>import {{ '{' }} ApplicationConfig {{ '}' }} from '@angular/core';
+import {{ '{' }} provideNgxLinkifyjs {{ '}' }} from '@code-name-jack/ngx-linkifyjs';
 
-@NgModule({{ '{' }}
-  imports: [
-    NgxLinkifyjsModule.forRoot({{ '{' }}
+export const appConfig: ApplicationConfig = {{ '{' }}
+  providers: [
+    provideNgxLinkifyjs({{ '{' }}
       enableHash: true,
       enableMention: true
     {{ '}' }})
   ]
-{{ '}' }})
-export class AppModule {{ '{' }} {{ '}' }}</code></pre>
+{{ '}' }};</code></pre>
       </div>
     </section>
   </main>

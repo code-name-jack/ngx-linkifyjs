@@ -10,17 +10,17 @@ export interface NgxLinkifyjsConfig {
 }
 
 export interface NgxLinkifyOptions {
-  attributes?: any;
+  attributes?: Record<string, string | number | boolean>;
   className?: string;
   defaultProtocol?: string;
-  events?: any;
-  ignoreTags?: Array<any>;
+  events?: Record<string, (event: Event) => void>;
+  ignoreTags?: string[];
   nl2br?: boolean;
   tagName?: string;
   target?: { url: string };
   validate?: boolean;
 
-  format?(value: any, type: any): any;
+  format?: (value: string, type: string) => string;
 
-  formatHref?(href: any, type: any): any;
+  formatHref?: (href: string, type: string) => string;
 }

@@ -17,7 +17,7 @@
 - #️⃣ **Hashtags** - Linkify hashtags for social media content
 - @ **Mentions** - Convert @mentions to links
 - 🎨 **Customizable** - Full control over link styling and behavior
-- 🚀 **Angular 20** - Built for modern Angular with standalone component support
+- 🚀 **Angular 20+** - Built for modern Angular with standalone-first architecture
 - 📦 **Tree-shakeable** - Optimized bundle size
 - 🔧 **TypeScript** - Full type safety
 
@@ -36,26 +36,40 @@ A comprehensive demo application is available in the [repository](https://github
 ### Option 1: Using Angular Schematics (Recommended)
 
 ```bash
-ng add ngx-linkifyjs
+ng add @code-name-jack/ngx-linkifyjs
 ```
 
 ### Option 2: Using npm
 
 ```bash
-npm install ngx-linkifyjs
+npm install @code-name-jack/ngx-linkifyjs
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### For Standalone Components (Angular 14+)
+**1. Configure in your app (app.config.ts):**
 
-**1. Import the pipe in your component:**
+```typescript
+import { ApplicationConfig } from '@angular/core';
+import { provideNgxLinkifyjs } from '@code-name-jack/ngx-linkifyjs';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideNgxLinkifyjs({
+      enableHash: true,     // Enable hashtag detection
+      enableMention: true   // Enable @mention detection
+    })
+  ]
+};
+```
+
+**2. Import the pipe in your component:**
 
 ```typescript
 import { Component } from '@angular/core';
-import { NgxLinkifyjsPipe } from 'ngx-linkifyjs';
+import { NgxLinkifyjsPipe } from '@code-name-jack/ngx-linkifyjs';
 
 @Component({
   selector: 'app-example',
@@ -70,19 +84,20 @@ export class ExampleComponent {
 }
 ```
 
-**2. Using the service:**
+**3. Using the service:**
 
 ```typescript
-import { Component } from '@angular/core';
-import { NgxLinkifyjsService } from 'ngx-linkifyjs';
+import { Component, inject } from '@angular/core';
+import { NgxLinkifyjsService } from '@code-name-jack/ngx-linkifyjs';
 
 @Component({
   selector: 'app-example',
-  standalone: true,
-  providers: [NgxLinkifyjsService]
+  standalone: true
 })
 export class ExampleComponent {
-  constructor(private linkifyService: NgxLinkifyjsService) {
+  private linkifyService = inject(NgxLinkifyjsService);
+  
+  constructor() {
     // Find all links
     const links = this.linkifyService.find('Visit github.com');
     // Output: [{ type: 'url', value: 'github.com', href: 'http://github.com' }]
@@ -96,22 +111,7 @@ export class ExampleComponent {
 }
 ```
 
-### For NgModule-based Applications
-
-```typescript
-import { NgModule } from '@angular/core';
-import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
-
-@NgModule({
-  imports: [
-    NgxLinkifyjsModule.forRoot({
-      enableHash: true,     // Enable hashtag detection
-      enableMention: true   // Enable @mention detection
-    })
-  ]
-})
-export class AppModule { }
-```
+> **Note:** Since `NgxLinkifyjsService` uses `providedIn: 'root'`, it's automatically available once you add `provideNgxLinkifyjs()` to your app config. The `provideNgxLinkifyjs()` function is only needed to configure plugin options (hashtags/mentions).
 
 ---
 
@@ -130,7 +130,7 @@ The `linkify` pipe transforms text into linkified HTML:
 ```
 
 ```typescript
-import { NgxLinkifyOptions } from 'ngx-linkifyjs';
+import { NgxLinkifyOptions } from '@code-name-jack/ngx-linkifyjs';
 
 export class MyComponent {
   text = 'Check out github.com and follow @angular!';
@@ -259,7 +259,7 @@ interface NgxLinkifyOptions {
 ### Example: Custom Configuration
 
 ```typescript
-import { NgxLinkifyOptions } from 'ngx-linkifyjs';
+import { NgxLinkifyOptions } from '@code-name-jack/ngx-linkifyjs';
 
 export class MyComponent {
   options: NgxLinkifyOptions = {
@@ -298,7 +298,7 @@ Configure hashtag and mention support globally:
 ```typescript
 // For standalone apps (in app.config.ts)
 import { ApplicationConfig } from '@angular/core';
-import { NgxLinkifyjsService, NgxLinkifyjsConfigToken } from 'ngx-linkifyjs';
+import { NgxLinkifyjsService, NgxLinkifyjsConfigToken } from '@code-name-jack/ngx-linkifyjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -313,18 +313,17 @@ export const appConfig: ApplicationConfig = {
   ]
 };
 
-// For NgModule apps
-import { NgxLinkifyjsModule } from 'ngx-linkifyjs';
+// In app.config.ts
+import { provideNgxLinkifyjs } from '@code-name-jack/ngx-linkifyjs';
 
-@NgModule({
-  imports: [
-    NgxLinkifyjsModule.forRoot({
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideNgxLinkifyjs({
       enableHash: false,      // Disable hashtags
       enableMention: false    // Disable mentions
     })
   ]
-})
-export class AppModule { }
+};
 ```
 
 ---
@@ -452,7 +451,7 @@ When testing components that use ngx-linkifyjs:
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxLinkifyjsPipe, NgxLinkifyjsService } from 'ngx-linkifyjs';
+import { NgxLinkifyjsPipe, NgxLinkifyjsService } from '@code-name-jack/ngx-linkifyjs';
 
 describe('MyComponent', () => {
   let component: MyComponent;
@@ -486,8 +485,8 @@ describe('MyComponent', () => {
 ### Exports
 
 ```typescript
-// Module
-export { NgxLinkifyjsModule }
+// Provider function (for both standalone and NgModule apps)
+export { provideNgxLinkifyjs }
 
 // Standalone pipe
 export { NgxLinkifyjsPipe }
