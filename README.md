@@ -23,22 +23,11 @@
 
 ## 🎮 Live Demo
 
-**Try it now!** Run the interactive demo locally:
-
-```bash
-git clone https://github.com/code-name-jack/ngx-linkifyjs-v2.git
-cd ngx-linkifyjs-v2
-npm install
-npm run demo
-```
-
-Open `http://localhost:4200` to see:
+A comprehensive demo application is available in the [repository](https://github.com/code-name-jack/ngx-linkifyjs-v2) showcasing:
 - 🎨 Interactive examples with live editing
 - 🔧 Service API demonstrations  
 - ⚙️ Configuration options showcase
 - 📝 Copy-paste code examples
-
-[View demo source code →](./projects/demo)
 
 ---
 
@@ -541,51 +530,12 @@ interface NgxLinkifyjsConfig {
 
 ---
 
-## 🎯 Demo Application
-
-The repository includes a comprehensive demo application built with Angular 20.
-
-### Run the Demo
-
-```bash
-# Clone and setup
-git clone https://github.com/code-name-jack/ngx-linkifyjs-v2.git
-cd ngx-linkifyjs-v2
-npm install
-
-# Run demo (builds library + starts dev server)
-npm run demo
-```
-
-Visit `http://localhost:4200` to see:
-
-- 🎨 **Interactive Examples** - Try the pipe with live editing
-- 🔧 **Service Demos** - See all service methods in action
-- 📝 **Code Snippets** - Copy-paste ready examples
-- ⚙️ **Configuration** - Explore all available options
-- 🎭 **Live Testing** - Test your own text in real-time
-
-### Build Demo for Production
-
-```bash
-npm run demo:build:prod
-```
-
-The built demo will be in `dist/demo/`
-
-📖 [Read more about the demo →](./projects/demo/README.md)
-
----
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+For development setup and publishing instructions, see the [Developer Guide](https://github.com/code-name-jack/ngx-linkifyjs-v2/blob/master/projects/ngx-linkifyjs-v2/README.md).
 
 ---
 
