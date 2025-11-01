@@ -37,33 +37,62 @@ jobs:
       - name: Determine version to publish
         id: determine-version
         run: |
+          # Install semver for version comparison
+          npm install semver > /dev/null 2>&1 || true
+          
           package_json="./${PACKAGE_DIR}/package.json"
           package_version=$(node -p "require('${package_json}').version")
-          latest_tag=$(git tag -l 'v*' --sort=-v:refname | head -n1)
-          latest_version=${latest_tag#v}
-
+          
+          # Get latest version from npm
+          npm_version=$(npm view "${PACKAGE_NAME}" version 2>/dev/null || echo "0.0.0")
+          
           echo "package.json version: ${package_version}"
-
-          if [ -n "$latest_version" ]; then
-            echo "latest tag: ${latest_tag}"
-          fi
-
-          new_version="${package_version}"
-
-          if [ -n "$latest_version" ] && [ "$latest_version" = "$package_version" ]; then
-            IFS='.' read -r major minor patch <<< "$package_version"
-            new_version="${major}.${minor}.$((patch + 1))"
+          echo "npm version: ${npm_version}"
+          
+          # Compare versions using semver
+          comparison=$(node -e "
+            const semver = require('semver');
+            const pkgVer = '${package_version}';
+            const npmVer = '${npm_version}';
+            if (semver.gt(pkgVer, npmVer)) {
+              console.log('package.json');
+            } else if (semver.gt(npmVer, pkgVer)) {
+              console.log('npm');
+            } else {
+              console.log('equal');
+            }
+          ")
+          
+          if [ "$comparison" = "npm" ]; then
+            # npm version is higher, bump its patch
+            new_version=$(node -e "
+              const semver = require('semver');
+              console.log(semver.inc('${npm_version}', 'patch'));
+            ")
+            echo "npm version (${npm_version}) is higher, bumping patch to: ${new_version}"
+            
+            # Update package.json with new version (without creating git tag)
             (cd "$PACKAGE_DIR" && npm version "$new_version" --no-git-tag-version)
-            echo "version bumped to ${new_version}"
-          elif [ -n "$latest_version" ]; then
-            highest=$(printf "%s\n%s" "$package_version" "$latest_version" | sort -V | tail -n1)
-            if [ "$highest" != "$package_version" ]; then
-              echo "::error::package.json version (${package_version}) is behind latest tag (${latest_version})."
-              exit 1
+            
+            # Also update package-lock.json if it exists in the package directory
+            if [ -f "${PACKAGE_DIR}/package-lock.json" ]; then
+              node -e "
+                const fs = require('fs');
+                const lockFile = '${PACKAGE_DIR}/package-lock.json';
+                const lock = JSON.parse(fs.readFileSync(lockFile, 'utf8'));
+                lock.version = '${new_version}';
+                fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
+              "
             fi
+            
+            final_version="${new_version}"
+          else
+            echo "Using package.json version: ${package_version}"
+            final_version="${package_version}"
           fi
-
-          echo "version=${new_version}" >> "$GITHUB_OUTPUT"
+          
+          echo "Final version to publish: ${final_version}"
+          echo "version=${final_version}" >> "$GITHUB_OUTPUT"
 
       - name: Install dependencies
         run: npm ci
@@ -85,7 +114,7 @@ jobs:
             echo "Version ${package_version} already exists on npm"
           else
             echo "version_exists=false" >> "$GITHUB_OUTPUT"
-            echo "Version ${package_version} is new"
+            echo "Version ${package_version} is new and will be published"
           fi
 
       - name: Publish to NPM
@@ -100,12 +129,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          if ! git diff --quiet "${PACKAGE_DIR}/package.json"; then
-            git add "${PACKAGE_DIR}/package.json"
-            git commit -m "chore: bump version to ${{ steps.determine-version.outputs.version }}"
-            git push origin HEAD:${{ github.ref_name }}
-          fi
-
+          # Create and push tag after successful publish
           git tag -a "v${{ steps.determine-version.outputs.version }}" -m "Release v${{ steps.determine-version.outputs.version }}"
           git push origin "v${{ steps.determine-version.outputs.version }}"
 
