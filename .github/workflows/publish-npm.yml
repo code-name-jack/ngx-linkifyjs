@@ -103,41 +103,69 @@ jobs:
       - name: Build library (production)
         run: npm run build:prod
 
-      - name: Check if version exists on npm
+      - name: Check if version exists on npm and bump if needed
         id: check-version
         run: |
+          # Install semver if not already available
+          npm install semver > /dev/null 2>&1 || true
+          
           package_version=${{ steps.determine-version.outputs.version }}
-          echo "package_version=${package_version}" >> "$GITHUB_OUTPUT"
-
+          
           if npm view "${PACKAGE_NAME}@${package_version}" version > /dev/null 2>&1; then
-            echo "version_exists=true" >> "$GITHUB_OUTPUT"
-            echo "Version ${package_version} already exists on npm"
+            echo "Version ${package_version} already exists on npm, bumping patch version"
+            
+            # Bump the patch version
+            new_version=$(node -e "
+              const semver = require('semver');
+              console.log(semver.inc('${package_version}', 'patch'));
+            ")
+            
+            echo "Bumping version from ${package_version} to ${new_version}"
+            
+            # Update package.json with new version (without creating git tag)
+            (cd "$PACKAGE_DIR" && npm version "$new_version" --no-git-tag-version)
+            
+            # Also update package-lock.json if it exists in the package directory
+            if [ -f "${PACKAGE_DIR}/package-lock.json" ]; then
+              node -e "
+                const fs = require('fs');
+                const lockFile = '${PACKAGE_DIR}/package-lock.json';
+                const lock = JSON.parse(fs.readFileSync(lockFile, 'utf8'));
+                lock.version = '${new_version}';
+                fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
+              "
+            fi
+            
+            # Rebuild with the new version
+            npm run build:prod
+            
+            final_version="${new_version}"
           else
-            echo "version_exists=false" >> "$GITHUB_OUTPUT"
             echo "Version ${package_version} is new and will be published"
+            final_version="${package_version}"
           fi
+          
+          echo "package_version=${final_version}" >> "$GITHUB_OUTPUT"
+          echo "Final version to publish: ${final_version}"
 
       - name: Publish to NPM
-        if: steps.check-version.outputs.version_exists == 'false'
         run: npm publish "./${DIST_DIR}" --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Create Git tag
-        if: steps.check-version.outputs.version_exists == 'false'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           # Create and push tag after successful publish
-          git tag -a "v${{ steps.determine-version.outputs.version }}" -m "Release v${{ steps.determine-version.outputs.version }}"
-          git push origin "v${{ steps.determine-version.outputs.version }}"
+          git tag -a "v${{ steps.check-version.outputs.package_version }}" -m "Release v${{ steps.check-version.outputs.package_version }}"
+          git push origin "v${{ steps.check-version.outputs.package_version }}"
 
       - name: Extract CHANGELOG for this version
-        if: steps.check-version.outputs.version_exists == 'false'
         id: changelog
         run: |
-          VERSION=${{ steps.determine-version.outputs.version }}
+          VERSION=${{ steps.check-version.outputs.package_version }}
           if [ -f CHANGELOG.md ]; then
             CHANGELOG=$(awk "/## \[?${VERSION}\]?/,/## \[?[0-9]/" CHANGELOG.md | head -n -1 | tail -n +2)
             if [ -z "$CHANGELOG" ]; then
@@ -149,11 +177,10 @@ jobs:
           echo "$CHANGELOG" > /tmp/changelog.txt
 
       - name: Create GitHub Release
-        if: steps.check-version.outputs.version_exists == 'false'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.determine-version.outputs.version }}
-          name: Release v${{ steps.determine-version.outputs.version }}
+          tag_name: v${{ steps.check-version.outputs.package_version }}
+          name: Release v${{ steps.check-version.outputs.package_version }}
           body_path: /tmp/changelog.txt
           draft: false
           prerelease: false
@@ -162,14 +189,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish success notification
-        if: steps.check-version.outputs.version_exists == 'false'
         run: |
-          echo "Published ${PACKAGE_NAME}@${{ steps.determine-version.outputs.version }} to npm"
-          echo "npm: https://www.npmjs.com/package/${PACKAGE_NAME}/v/${{ steps.determine-version.outputs.version }}"
-          echo "GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.determine-version.outputs.version }}"
-
-      - name: Version already published
-        if: steps.check-version.outputs.version_exists == 'true'
-        run: |
-          echo "::warning::Version ${{ steps.determine-version.outputs.version }} already exists on npm. Skipping publish."
-          exit 0
+          echo "Published ${PACKAGE_NAME}@${{ steps.check-version.outputs.package_version }} to npm"
+          echo "npm: https://www.npmjs.com/package/${PACKAGE_NAME}/v/${{ steps.check-version.outputs.package_version }}"
+          echo "GitHub Release: https://github.com/${{ github.repository }}/releases/tag/v${{ steps.check-version.outputs.package_version }}"
