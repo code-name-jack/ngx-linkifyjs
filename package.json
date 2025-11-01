@@ -3,8 +3,8 @@
   "version": "17.0.1",
   "scripts": {
     "ng": "ng",
-    "build": "ng build ngx-linkifyjs-v2",
-    "build:prod": "ng build ngx-linkifyjs-v2 --configuration production",
+    "build": "ng build ngx-linkifyjs-v2 && npm run --prefix projects/ngx-linkifyjs-v2 postbuild",
+    "build:prod": "ng build ngx-linkifyjs-v2 --configuration production && npm run --prefix projects/ngx-linkifyjs-v2 postbuild",
     "build:docs": "npx compodoc -p projects/ngx-linkifyjs-v2/tsconfig.lib.json --hideGenerator --disableCoverage -d dist/doc/",
     "publish:lib": "npm publish ./dist/ngx-linkifyjs-v2",
     "test": "ng test --watch=false",

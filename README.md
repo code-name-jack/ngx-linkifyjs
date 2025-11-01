@@ -535,7 +535,7 @@ interface NgxLinkifyjsConfig {
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-For development setup and publishing instructions, see the [Developer Guide](https://github.com/code-name-jack/ngx-linkifyjs-v2/blob/master/projects/ngx-linkifyjs-v2/README.md).
+For development setup and publishing instructions, see the [Developer Guide](https://github.com/code-name-jack/ngx-linkifyjs-v2/blob/master/projects/ngx-linkifyjs-v2/README.dev.md).
 
 ---
 
