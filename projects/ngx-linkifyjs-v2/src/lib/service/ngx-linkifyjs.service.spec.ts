@@ -1,13 +1,84 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, beforeAll } from 'vitest';
 import {inject, TestBed} from '@angular/core/testing';
 import { provideZonelessChangeDetection } from '@angular/core';
-// Import plugins to auto-register them with linkifyjs
-import 'linkify-plugin-hashtag';
-import 'linkify-plugin-mention';
+import * as linkify from 'linkifyjs';
 
-import {NgxLinkifyjsService} from './ngx-linkifyjs.service';
-import {LinkType} from '../enum/linktype.enum';
-import {Link} from '../interfaces/ngx-linkifyjs.interface';
+import {NgxLinkifyjsService} from 'ngx-linkifyjs-v2';
+import {LinkType} from 'ngx-linkifyjs-v2';
+import {Link} from 'ngx-linkifyjs-v2';
+
+function registerHashtagPlugin(): void {
+  const HashtagToken = linkify.createTokenClass('hashtag', { isLink: true });
+
+  function hashtag({ scanner, parser }: { scanner: any; parser: any }) {
+    const { POUND, UNDERSCORE, FULLWIDTHMIDDLEDOT, ASCIINUMERICAL, ALPHANUMERICAL } = scanner.tokens;
+    const { alpha, numeric, alphanumeric, emoji } = scanner.tokens.groups;
+
+    const Hash = parser.start.tt(POUND);
+    const HashPrefix = Hash.tt(UNDERSCORE);
+    const Hashtag = new linkify.State(HashtagToken);
+    Hash.tt(ASCIINUMERICAL, Hashtag);
+    Hash.tt(ALPHANUMERICAL, Hashtag);
+    Hash.ta(numeric, HashPrefix);
+    Hash.ta(alpha, Hashtag);
+    Hash.ta(emoji, Hashtag);
+    Hash.ta(FULLWIDTHMIDDLEDOT, Hashtag);
+    HashPrefix.tt(ASCIINUMERICAL, Hashtag);
+    HashPrefix.tt(ALPHANUMERICAL, Hashtag);
+    HashPrefix.ta(alpha, Hashtag);
+    HashPrefix.ta(emoji, Hashtag);
+    HashPrefix.ta(FULLWIDTHMIDDLEDOT, Hashtag);
+    HashPrefix.ta(numeric, HashPrefix);
+    HashPrefix.tt(UNDERSCORE, HashPrefix);
+    Hashtag.ta(alphanumeric, Hashtag);
+    Hashtag.ta(emoji, Hashtag);
+    Hashtag.tt(FULLWIDTHMIDDLEDOT, Hashtag);
+    Hashtag.tt(UNDERSCORE, Hashtag);
+  }
+
+  linkify.registerPlugin('hashtag', hashtag);
+}
+
+function registerMentionPlugin(): void {
+  const MentionToken = linkify.createTokenClass('mention', {
+    isLink: true,
+    toHref() {
+      return '/' + this.toString().slice(1);
+    }
+  });
+
+  function mention({ scanner, parser }: { scanner: any; parser: any }) {
+    const { HYPHEN, SLASH, UNDERSCORE, AT } = scanner.tokens;
+    const { domain } = scanner.tokens.groups;
+
+    const At = parser.start.tt(AT);
+    const AtHyphen = At.tt(HYPHEN);
+    AtHyphen.tt(HYPHEN, AtHyphen);
+
+    const Mention = At.tt(UNDERSCORE, MentionToken);
+    At.ta(domain, Mention);
+    AtHyphen.tt(UNDERSCORE, Mention);
+    AtHyphen.ta(domain, Mention);
+
+    Mention.ta(domain, Mention);
+    Mention.tt(HYPHEN, Mention);
+    Mention.tt(UNDERSCORE, Mention);
+
+    const MentionDivider = Mention.tt(SLASH);
+    MentionDivider.ta(domain, Mention);
+    MentionDivider.tt(UNDERSCORE, Mention);
+    MentionDivider.tt(HYPHEN, Mention);
+  }
+
+  linkify.registerPlugin('mention', mention);
+}
+
+beforeAll(async () => {
+  linkify.reset();
+  registerHashtagPlugin();
+  registerMentionPlugin();
+  linkify.init();
+});
 
 describe('NgxLinkifyjsService without importing hashtag/mention', () => {
   beforeEach(() => {
@@ -191,5 +262,3 @@ describe('NgxLinkifyjsService', () => {
     expect(service.find(undefined as any)).toEqual([]);
   }));
 });
-
-
