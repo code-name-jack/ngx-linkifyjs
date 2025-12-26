@@ -10,7 +10,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "builder": "@angular/build:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-linkifyjs-v2/tsconfig.lib.json",
             "project": "projects/ngx-linkifyjs-v2/ng-package.json"
