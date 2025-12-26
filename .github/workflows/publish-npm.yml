@@ -39,16 +39,16 @@ jobs:
         run: |
           # Install semver for version comparison
           npm install semver > /dev/null 2>&1 || true
-          
+
           package_json="./${PACKAGE_DIR}/package.json"
           package_version=$(node -p "require('${package_json}').version")
-          
+
           # Get latest version from npm
           npm_version=$(npm view "${PACKAGE_NAME}" version 2>/dev/null || echo "0.0.0")
-          
+
           echo "package.json version: ${package_version}"
           echo "npm version: ${npm_version}"
-          
+
           # Compare versions using semver
           comparison=$(node -e "
             const semver = require('semver');
@@ -62,7 +62,7 @@ jobs:
               console.log('equal');
             }
           ")
-          
+
           if [ "$comparison" = "npm" ]; then
             # npm version is higher, bump its patch
             new_version=$(node -e "
@@ -70,10 +70,10 @@ jobs:
               console.log(semver.inc('${npm_version}', 'patch'));
             ")
             echo "npm version (${npm_version}) is higher, bumping patch to: ${new_version}"
-            
+
             # Update package.json with new version (without creating git tag)
             (cd "$PACKAGE_DIR" && npm version "$new_version" --no-git-tag-version)
-            
+
             # Also update package-lock.json if it exists in the package directory
             if [ -f "${PACKAGE_DIR}/package-lock.json" ]; then
               node -e "
@@ -84,13 +84,13 @@ jobs:
                 fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
               "
             fi
-            
+
             final_version="${new_version}"
           else
             echo "Using package.json version: ${package_version}"
             final_version="${package_version}"
           fi
-          
+
           echo "Final version to publish: ${final_version}"
           echo "version=${final_version}" >> "$GITHUB_OUTPUT"
 
@@ -108,23 +108,23 @@ jobs:
         run: |
           # Install semver if not already available
           npm install semver > /dev/null 2>&1 || true
-          
+
           package_version=${{ steps.determine-version.outputs.version }}
-          
+
           if npm view "${PACKAGE_NAME}@${package_version}" version > /dev/null 2>&1; then
             echo "Version ${package_version} already exists on npm, bumping patch version"
-            
+
             # Bump the patch version
             new_version=$(node -e "
               const semver = require('semver');
               console.log(semver.inc('${package_version}', 'patch'));
             ")
-            
+
             echo "Bumping version from ${package_version} to ${new_version}"
-            
+
             # Update package.json with new version (without creating git tag)
             (cd "$PACKAGE_DIR" && npm version "$new_version" --no-git-tag-version)
-            
+
             # Also update package-lock.json if it exists in the package directory
             if [ -f "${PACKAGE_DIR}/package-lock.json" ]; then
               node -e "
@@ -135,23 +135,21 @@ jobs:
                 fs.writeFileSync(lockFile, JSON.stringify(lock, null, 2) + '\n');
               "
             fi
-            
+
             # Rebuild with the new version
             npm run build:prod
-            
+
             final_version="${new_version}"
           else
             echo "Version ${package_version} is new and will be published"
             final_version="${package_version}"
           fi
-          
+
           echo "package_version=${final_version}" >> "$GITHUB_OUTPUT"
           echo "Final version to publish: ${final_version}"
 
       - name: Publish to NPM
         run: npm publish "./${DIST_DIR}" --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Create Git tag
         run: |
