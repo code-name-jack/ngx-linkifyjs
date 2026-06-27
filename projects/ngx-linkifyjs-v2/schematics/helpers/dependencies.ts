@@ -6,10 +6,6 @@ import {
 } from '@schematics/angular/utility/dependencies';
 
 /**
- * Simplified dependency helper for Angular 20
- */
-
-/**
  * Add a dependency to package.json
  */
 export function addPackageJsonDependency(
@@ -20,4 +16,3 @@ export function addPackageJsonDependency(
 }
 
 export { NodeDependency, NodeDependencyType };
-

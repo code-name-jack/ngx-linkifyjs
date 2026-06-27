@@ -1,6 +1,6 @@
 # NgxLinkifyjs
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.
+This library is built with [Angular CLI](https://github.com/angular/angular-cli) version 22.
 
 ## Code scaffolding
 
@@ -17,7 +17,7 @@ After building your library with `ng build ngx-linkifyjs-v2`, go to the dist fol
 
 ## Running unit tests
 
-Run `ng test ngx-linkifyjs-v2` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test ngx-linkifyjs-v2` to execute the unit tests with Vitest.
 
 ## Further help
 

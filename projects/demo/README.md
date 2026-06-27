@@ -1,6 +1,6 @@
 # ngx-linkifyjs Demo Application
 
-This is a comprehensive demo application showcasing the features of the ngx-linkifyjs library for Angular 20.
+This is a comprehensive demo application showcasing the features of the ngx-linkifyjs library for Angular 22.
 
 ## Features Demonstrated
 
@@ -148,7 +148,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Technologies Used
 
-- Angular 20
+- Angular 22
 - ngx-linkifyjs-v2
 - TypeScript
 - CSS3 with modern features
@@ -161,4 +161,3 @@ If you find any issues or have suggestions for improvements to the demo, please 
 ## License
 
 MIT
-

@@ -42,9 +42,7 @@
     "release:patch": "../../node_modules/.bin/release-it --patch --ci",
     "release:minor": "../../node_modules/.bin/release-it --minor --ci",
     "release:major": "../../node_modules/.bin/release-it --major --ci",
-    "ng:test": "../../node_modules/.bin/ng test ngx-linkifyjs-v2",
-    "test": "../../node_modules/.bin/jest --coverage",
-    "test:watch": "../../node_modules/.bin/jest --coverage --watch"
+    "ng:test": "../../node_modules/.bin/ng test ngx-linkifyjs-v2"
   },
   "engines": {
     "node": ">=22.0.0"
@@ -56,10 +54,10 @@
     "@angular/common": "^22.0.0",
     "@angular/core": "^22.0.0",
     "@schematics/angular": "^22.0.0",
-    "linkify-plugin-hashtag": "^4.0.2",
-    "linkify-plugin-mention": "^4.0.2",
-    "linkify-string": "^4.0.2",
-    "linkifyjs": "^4.0.2"
+    "linkify-plugin-hashtag": "^4.3.3",
+    "linkify-plugin-mention": "^4.3.3",
+    "linkify-string": "^4.3.3",
+    "linkifyjs": "^4.3.3"
   },
   "release-it": {
     "github": {
@@ -87,40 +85,5 @@
       "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}.",
       "before:npm": "echo building the library..."
     }
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupFilesAfterEnv": [
-      "<rootDir>/../setup-jest.ts"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(ts|js|mjs)$": [
-        "jest-preset-angular",
-        {
-          "tsconfig": "<rootDir>/tsconfig.spec.json",
-          "stringifyContentPathRegex": "\\.html$"
-        }
-      ]
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!.*\\.mjs$)"
-    ],
-    "coverageReporters": [
-      "lcov",
-      "text"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/config",
-      "/dist/"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "html",
-      "js",
-      "json",
-      "mjs"
-    ]
   }
 }

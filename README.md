@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/ngx-linkifyjs.svg)](https://badge.fury.io/js/ngx-linkifyjs)
 [![license](https://img.shields.io/github/license/anthonynahas/ngx-linkifyjs.svg?style=flat-square)](https://github.com/AnthonyNahas/ngx-linkifyjs/blob/master/LICENSE)
 
-> **Angular 20+ wrapper for linkifyjs** - Automatically find and convert URLs, emails, hashtags, and mentions in text to HTML links.
+> **Angular 22+ wrapper for linkifyjs** - Automatically find and convert URLs, emails, hashtags, and mentions in text to HTML links.
 
 <p align="center">
   <img alt="ngx-linkifyjs demo" width="320px" style="text-align: center;" 
@@ -17,7 +17,7 @@
 - #️⃣ **Hashtags** - Linkify hashtags for social media content
 - @ **Mentions** - Convert @mentions to links
 - 🎨 **Customizable** - Full control over link styling and behavior
-- 🚀 **Angular 20+** - Built for modern Angular with standalone-first architecture
+- 🚀 **Angular 22+** - Built for modern Angular with standalone-first architecture
 - 📦 **Tree-shakeable** - Optimized bundle size
 - 🔧 **TypeScript** - Full type safety
 
