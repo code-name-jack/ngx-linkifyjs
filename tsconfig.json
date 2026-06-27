@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -16,10 +15,10 @@
     ],
     "paths": {
       "ngx-linkifyjs-v2": [
-        "projects/ngx-linkifyjs-v2/src/public-api"
+        "./projects/ngx-linkifyjs-v2/src/public-api"
       ],
       "ngx-linkifyjs-v2/*": [
-        "projects/ngx-linkifyjs-v2/src/lib/*"
+        "./projects/ngx-linkifyjs-v2/src/lib/*"
       ]
     },
     "esModuleInterop": true,

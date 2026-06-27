@@ -1,7 +1,7 @@
 {
   "name": "@code-name-jack/ngx-linkifyjs",
   "description": "Angular wrapper for linkifyjs(v4) -  library for finding links in plain text and converting them to HTML &lt;a&gt; tags via linkifyjs",
-  "version": "21.0.0",
+  "version": "22.0.0",
   "homepage": "https://github.com/code-name-jack/ngx-linkifyjs-v2",
   "author": {
     "name": "Code Name Jack",
@@ -49,15 +49,17 @@
   "engines": {
     "node": ">=22.0.0"
   },
+  "dependencies": {
+    "tslib": "^2.4.1"
+  },
   "peerDependencies": {
-    "@angular/common": "^21.0.0",
-    "@angular/core": "^21.0.0",
-    "@schematics/angular": "^21.0.0",
+    "@angular/common": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@schematics/angular": "^22.0.0",
     "linkify-plugin-hashtag": "^4.0.2",
     "linkify-plugin-mention": "^4.0.2",
     "linkify-string": "^4.0.2",
-    "linkifyjs": "^4.0.2",
-    "tslib": "^2.4.1"
+    "linkifyjs": "^4.0.2"
   },
   "release-it": {
     "github": {
